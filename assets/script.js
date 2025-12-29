@@ -27,7 +27,7 @@ function setSlide(slideId) {
 
 function setSlideImage(slideId) {
 	const bannerImage = document.querySelector(".banner-img");
-	bannerImage.src = "../assets/images/slideshow/" + slides[slideId-1].image;
+	bannerImage.src = "./assets/images/slideshow/" + slides[slideId-1].image;
 }
 
 function setSlideText(slideId) {
