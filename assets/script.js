@@ -17,25 +17,71 @@ const slides = [
 	}
 ]
 
+
+function setSlide(slideId) {
+	// console.log("set slide " + slideId);
+	setSlideImage(slideId); // Change image
+	setSlideText(slideId); // Change text
+	setSlideDot(slideId); // Update selected dot
+}
+
+function setSlideImage(slideId) {
+	const bannerImage = document.querySelector(".banner-img");
+	bannerImage.src = "../assets/images/slideshow/" + slides[slideId-1].image;
+}
+
+function setSlideText(slideId) {
+	const bannerText = document.querySelector("#banner > p");
+	bannerText.innerHTML = slides[slideId-1].tagLine;
+}
+
+function setSlideDot(slideId) {
+	document.querySelector(".dot_selected").classList.remove("dot_selected");
+	document.querySelector(".dot" + slideId).classList.add("dot_selected");
+}
+
+
 // Add one dot per slide
 const dotsContainer = document.querySelector(".dots");
 for (let i = 0; i < slides.length; i++) {
 	const dot = document.createElement("div");
 	dot.classList = "dot dot" + (i+1);
-	if (i === 0) {
-		dot.classList.add("dot_selected")
-	}
-	dotsContainer.appendChild(dot)
+	dotsContainer.appendChild(dot);
 }
+// Start with first slide
+document.querySelector(".dot1").classList.add("dot_selected");
+let currentSlideId = 1;
 
-// Detect click on left arrow
+
+// Click on left arrow
 const arrowLeft = document.querySelector(".arrow_left");
 arrowLeft.addEventListener("click", function () {
-    console.log("click fleche gauche")
+	// console.log("click fleche gauche");
+	// Go to the next slide
+	if (currentSlideId > 1) {
+		currentSlideId--;
+		setSlide(currentSlideId);
+	}
+	// Jump to the last slide
+	else {
+		currentSlideId = slides.length;
+		setSlide(currentSlideId);
+	}
 });
 
-// Detect click on right arrow
+
+// Click on right arrow
 const arrowRight = document.querySelector(".arrow_right");
 arrowRight.addEventListener("click", function () {
-    console.log("click fleche droite")
+	// console.log("click fleche droite");
+	// Go to the previous slide
+	if (currentSlideId < slides.length) {
+		currentSlideId++;
+		setSlide(currentSlideId);
+	}
+	// Jump back to the first slide
+	else {
+		currentSlideId = 1;
+		setSlide(currentSlideId);
+	}
 });
