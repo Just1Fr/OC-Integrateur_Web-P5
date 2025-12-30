@@ -26,15 +26,10 @@ function setSlide(slideId) {
 }
 
 function setSlideImage(slideId) {
-	const bannerImage = document.querySelector(".banner-img");
-	// Remove previous image
-	bannerImage.innerHTML = "";
-	// Add new image
-	const img = document.createElement("img");
+	const img = document.querySelector("img.banner-img");
+	// Set new image src and alt
 	img.src = "./assets/images/slideshow/" + slides[slideId-1].image;
 	img.alt = slides[slideId-1].tagLine.replaceAll(/<\/?span>/g, ""); // Remove "<span>" and "</span>" for alt
-	img.classList = "banner-img";
-	bannerImage.appendChild(img);
 }
 
 function setSlideText(slideId) {
@@ -48,6 +43,12 @@ function setSlideDot(slideId) {
 	document.querySelector(".dot_selected").classList.remove("dot_selected");
 	// Add .dot_selected for dot of current slide
 	document.querySelector(".dot" + slideId).classList.add("dot_selected");
+}
+
+function initSlide(slideId) {
+	initSlideImage(slideId);
+	setSlideText(slideId);
+	initDots(slideId);
 }
 
 function initDots(slideId) {
@@ -64,11 +65,22 @@ function initDots(slideId) {
 	document.querySelector(".dot" + slideId).classList.add("dot_selected");
 }
 
+function initSlideImage(slideId) {
+	const bannerImage = document.querySelector("div.banner-img");
+	// Remove previously generated image
+	bannerImage.innerHTML = "";
+	// Add image element
+	const img = document.createElement("img");
+	img.classList = "banner-img";
+	bannerImage.appendChild(img);
+	// Add image of current slide
+	setSlideImage(slideId);
+}
+
 
 // Start with first slide
 let currentSlideId = 1;
-initDots(currentSlideId);
-setSlide(currentSlideId);
+initSlide(currentSlideId);
 
 
 // Click on left arrow
