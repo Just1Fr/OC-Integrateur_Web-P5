@@ -22,64 +22,81 @@ function setSlide(slideId) {
 	// console.log("set slide " + slideId);
 	setSlideImage(slideId); // Change image
 	setSlideText(slideId); // Change text
-	setSlideDot(slideId); // Update selected dot
+	setSlideDot(slideId); // Update dot
 }
 
 function setSlideImage(slideId) {
 	const bannerImage = document.querySelector(".banner-img");
-	bannerImage.src = "./assets/images/slideshow/" + slides[slideId-1].image;
+	// Remove previous image
+	bannerImage.innerHTML = "";
+	// Add new image
+	const img = document.createElement("img");
+	img.src = "./assets/images/slideshow/" + slides[slideId-1].image;
+	img.alt = slides[slideId-1].tagLine.replaceAll(/<\/?span>/g, ""); // Remove "<span>" and "</span>" for alt
+	img.classList = "banner-img";
+	bannerImage.appendChild(img);
 }
 
 function setSlideText(slideId) {
 	const bannerText = document.querySelector("#banner > p");
+	// Replace previous text
 	bannerText.innerHTML = slides[slideId-1].tagLine;
 }
 
 function setSlideDot(slideId) {
+	// Remove .dot_selected for dot of previous slide
 	document.querySelector(".dot_selected").classList.remove("dot_selected");
+	// Add .dot_selected for dot of current slide
+	document.querySelector(".dot" + slideId).classList.add("dot_selected");
+}
+
+function initDots(slideId) {
+	const dotsContainer = document.querySelector(".dots");
+	// Remove previously generated dots
+	dotsContainer.innerHTML = "";
+	// Add one dot per slide
+	for (let i = 0; i < slides.length; i++) {
+		const dot = document.createElement("div");
+		dot.classList = "dot dot" + (i+1); // Add .dot and .dot<id>
+		dotsContainer.appendChild(dot);
+	}
+	// Add .dot_selected for dot of current slide
 	document.querySelector(".dot" + slideId).classList.add("dot_selected");
 }
 
 
-// Add one dot per slide
-const dotsContainer = document.querySelector(".dots");
-for (let i = 0; i < slides.length; i++) {
-	const dot = document.createElement("div");
-	dot.classList = "dot dot" + (i+1);
-	dotsContainer.appendChild(dot);
-}
 // Start with first slide
-document.querySelector(".dot1").classList.add("dot_selected");
 let currentSlideId = 1;
+initDots(currentSlideId);
+setSlide(currentSlideId);
 
 
 // Click on left arrow
 const arrowLeft = document.querySelector(".arrow_left");
 arrowLeft.addEventListener("click", function () {
 	// console.log("click fleche gauche");
-	// Go to the next slide
+	// Go to next slide
 	if (currentSlideId > 1) {
 		currentSlideId--;
 		setSlide(currentSlideId);
 	}
-	// Jump to the last slide
+	// Jump to last slide
 	else {
 		currentSlideId = slides.length;
 		setSlide(currentSlideId);
 	}
 });
 
-
 // Click on right arrow
 const arrowRight = document.querySelector(".arrow_right");
 arrowRight.addEventListener("click", function () {
 	// console.log("click fleche droite");
-	// Go to the previous slide
+	// Go to previous slide
 	if (currentSlideId < slides.length) {
 		currentSlideId++;
 		setSlide(currentSlideId);
 	}
-	// Jump back to the first slide
+	// Jump back to first slide
 	else {
 		currentSlideId = 1;
 		setSlide(currentSlideId);
